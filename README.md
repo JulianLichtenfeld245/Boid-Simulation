@@ -14,7 +14,7 @@ Main: arrayList of Boids,
     check proximity, return boids array
 AUDREY Renderer:
     Methods: initialize(ScreenWidth, ScreenHeight, initialBoidsArray), render(currentBoidsArray)
-
+Test: place to test all our classes and end product
 
 
 #Sources (aka soyces)

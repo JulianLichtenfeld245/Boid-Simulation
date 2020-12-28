@@ -38,7 +38,7 @@ public class Tests {
         Vector cohesionAdjustment = new Vector(0.5, 0.5);
         // current COHESION_RATE is 1 / 100
         cohesionAdjustment = cohesionAdjustment.multiply(1.0 / 100);
-        assertEquals(singleBoid.cohesionRule(someBoids), cohesionAdjustment);
+        assertEquals(cohesionAdjustment, singleBoid.cohesionRule(someBoids));
     }
 
     @Test
@@ -52,6 +52,35 @@ public class Tests {
         Vector alignmentAdjustment = new Vector(0.5, 0.5);
         // current ALIGNMENT_RATE is 1 / 8
         alignmentAdjustment = alignmentAdjustment.multiply(1.0 / 8);
-        assertEquals(singleBoid.alignmentRule(someBoids), alignmentAdjustment);
+        assertEquals(alignmentAdjustment, singleBoid.alignmentRule(someBoids));
+    }
+
+    @Test
+    public void simpleSeparationRuleTest() {
+        ArrayList<Boid> someBoids = new ArrayList<>();
+        someBoids.add(new Boid(0, 0, 0, 0));
+        someBoids.add(new Boid(1, 0, 0, 0));
+        someBoids.add(new Boid(1, 1, 0, 0));
+        someBoids.add(new Boid(0, 1, 0, 0));
+        Boid farBoid = new Boid(1000, 1000, 1000, 1000);
+        Vector noSeparationAdjustment = new Vector(0, 0);
+        assertEquals(noSeparationAdjustment, farBoid.separationRule(someBoids));
+        // boid below shouldn't have sepeartionAdjustment bc there are boids that cancel each
+        // other's separationAdjustment
+        Boid closeCenterBoid = new Boid(0.5, 0.5, 0 ,0);
+        assertEquals(noSeparationAdjustment, closeCenterBoid.separationRule(someBoids));
+        // should move right (+x value) bc of birds to left (at 0,0 and 0,1)
+        Boid closeRightBoid = new Boid(1, 0.5, 0, 0);
+        Vector separationAdjustment = new Vector(2, 0);
+        assertEquals(separationAdjustment, closeRightBoid.separationRule(someBoids));
+        ArrayList<Boid> someBoids2 = new ArrayList<>();
+        someBoids2.add(new Boid(0, 1, 0, 0));
+        someBoids2.add(new Boid(0, 0, 0, 0));
+        someBoids2.add(new Boid(0, -1, 0, 0));
+        someBoids2.add(new Boid(0, 2, 0, 0));
+        someBoids2.add(new Boid(0, -2, 0, 0));
+        Boid closeLeftBoid = new Boid(-1, 0, 0, 0);
+        Vector separationAdjustment2 = new Vector(-5, 0);
+        assertEquals(separationAdjustment2, closeLeftBoid.separationRule(someBoids2));
     }
 }

@@ -7,6 +7,7 @@ public class Boid {
     private Vector velocity;
     private static double COHESION_RATE = 1.0 / 100;
     private static double ALIGNMENT_RATE = 1.0 / 8;
+    private static double TOO_CLOSE_DISTANCE = 10;
 
     public Boid(Vector pos, Vector vel) {
         position = pos;
@@ -49,5 +50,25 @@ public class Boid {
         }
         avgVel = avgVel.multiply(1.0 / proximityBoids.size());
         return avgVel.multiply(ALIGNMENT_RATE);
+    }
+
+    public Vector separationRule(ArrayList<Boid> proximityBoids) {
+        Vector separationVel = new Vector();
+        for (Boid boid: proximityBoids) {
+            double dist = getPosition().distance(boid.getPosition());
+            if (dist < TOO_CLOSE_DISTANCE) {
+                separationVel = separationVel.add(getPosition().subtract(boid.getPosition()));
+            }
+        }
+        return separationVel;
+    }
+
+    public boolean equals(Object o) {
+        Boid other = (Boid) o;
+        return getPosition().equals(other.getPosition()) && getVelocity().equals(other.getVelocity());
+    }
+
+    public String toString() {
+        return "pos: " + getPosition().toString() + ", vel: " + getVelocity().toString();
     }
 }

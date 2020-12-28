@@ -44,6 +44,13 @@ public class Vector {
         return new Vector(xProduct, yProduct);
     }
 
+    /** returns the euclidian distance between two vectors */
+    public double distance(Vector otherVector) {
+        // vector describing the distance between the self vector and otherVector
+        Vector distanceVector = subtract(otherVector);
+        return Math.sqrt(Math.pow(distanceVector.getX(), 2) + Math.pow(distanceVector.getY(), 2));
+    }
+
     public boolean equals(Object o) {
         Vector other = (Vector) o;
         return x == other.getX() && y == other.getY();

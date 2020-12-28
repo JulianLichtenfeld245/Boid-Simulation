@@ -9,6 +9,11 @@ public class Vector {
         y = givenY;
     }
 
+    /** creates a vector at (0, 0) */
+    public Vector() {
+        new Vector(0, 0);
+    }
+
     public double getX() {
         return x;
     }
@@ -17,18 +22,26 @@ public class Vector {
         return y;
     }
 
-    /** adds vector1 and vector2 x and y values */
-    public Vector add(Vector vector1, Vector vector2) {
-        double xSum = vector1.getX() + vector2.getX();
-        double ySum = vector1.getY() + vector2.getY();
+    /** returns a new vector with x and y values equal to the sum of otherVector and self values
+     * without modifying either input vectors*/
+    public Vector add(Vector otherVector) {
+        double xSum = getX() + otherVector.getX();
+        double ySum = getY() + otherVector.getY();
         return new Vector(xSum, ySum);
     }
 
-    /** subtracts vector2 from vector1 x and y values */
-    public Vector subtract(Vector vector1, Vector vector2) {
-        double xDiff = vector1.getX() - vector2.getX();
-        double yDiff = vector1.getY() - vector2.getY();
+    /** returns a new vector with x and y values equal to the value of self values minus otherVector values
+     * without modifying either input vectors*/
+    public Vector subtract(Vector otherVector) {
+        double xDiff = getX() - otherVector.getX();
+        double yDiff = getY() - otherVector.getY();
         return new Vector(xDiff, yDiff);
+    }
+
+    public Vector multiply(double factor) {
+        double xProduct = getX() * factor;
+        double yProduct = getY() * factor;
+        return new Vector(xProduct, yProduct);
     }
 
     public boolean equals(Object o) {

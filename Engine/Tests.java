@@ -2,6 +2,8 @@ package Engine;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 public class Tests {
@@ -14,13 +16,28 @@ public class Tests {
         Vector vector3 = new Vector(1, 1);
         Vector vector4 = new Vector(2, 9);
         Vector vector5 = new Vector(3, 4);
-        assertTrue(vector1.equals(vector1));
-        assertFalse(vector1 == vector2);
-        assertTrue(vector1.equals(vector2));
-        assertFalse(vector1.equals(vector3));
-        assertFalse(vector1.equals(vector4));
-        assertFalse(vector1.equals(vector5));
+        assertEquals(vector1, vector1);
+        assertNotSame(vector1, vector2);
+        assertEquals(vector1, vector2);
+        assertNotEquals(vector1, vector3);
+        assertNotEquals(vector1,vector4);
+        assertNotEquals(vector1, vector5);
+        assertEquals(new Vector(), new Vector(0, 0));
         System.out.println(vector1);
         System.out.println("Above should read Vector (2.0, 4.0)");
+    }
+
+    @Test
+    public void simpleCohesionRuleTest() {
+        ArrayList<Boid> someBoids = new ArrayList<>();
+        someBoids.add(new Boid(0, 0, 0, 0));
+        someBoids.add(new Boid(1, 0, 0, 0));
+        someBoids.add(new Boid(1, 1, 0, 0));
+        someBoids.add(new Boid(0, 1, 0, 0));
+        Boid singleBoid = new Boid(1000, 1000, 1000, 1000);
+        Vector cohesionAdjustment = new Vector(0.5, 0.5);
+        // current COHESION_RATE is 1/ 100
+        cohesionAdjustment = cohesionAdjustment.multiply(1.0 / 100);
+        assertEquals(singleBoid.cohesionRule(someBoids), cohesionAdjustment);
     }
 }

@@ -6,6 +6,7 @@ public class Boid {
     private Vector position;
     private Vector velocity;
     private static double COHESION_RATE = 1.0 / 100;
+    private static double ALIGNMENT_RATE = 1.0 / 8;
 
     public Boid(Vector pos, Vector vel) {
         position = pos;
@@ -39,5 +40,14 @@ public class Boid {
         }
         massCenter = massCenter.multiply(1.0 / proximityBoids.size());
         return massCenter.multiply(COHESION_RATE);
+    }
+
+    public Vector alignmentRule(ArrayList<Boid> proximityBoids) {
+        Vector avgVel = new Vector();
+        for (Boid boid: proximityBoids) {
+            avgVel = avgVel.add(boid.getVelocity());
+        }
+        avgVel = avgVel.multiply(1.0 / proximityBoids.size());
+        return avgVel.multiply(ALIGNMENT_RATE);
     }
 }

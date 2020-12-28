@@ -36,8 +36,22 @@ public class Tests {
         someBoids.add(new Boid(0, 1, 0, 0));
         Boid singleBoid = new Boid(1000, 1000, 1000, 1000);
         Vector cohesionAdjustment = new Vector(0.5, 0.5);
-        // current COHESION_RATE is 1/ 100
+        // current COHESION_RATE is 1 / 100
         cohesionAdjustment = cohesionAdjustment.multiply(1.0 / 100);
         assertEquals(singleBoid.cohesionRule(someBoids), cohesionAdjustment);
+    }
+
+    @Test
+    public void simpleAlignmentRuleTest() {
+        ArrayList<Boid> someBoids = new ArrayList<>();
+        someBoids.add(new Boid(0, 0, 0, 0));
+        someBoids.add(new Boid(0, 0, 1, 0));
+        someBoids.add(new Boid(0, 0, 1, 1));
+        someBoids.add(new Boid(0, 0, 0, 1));
+        Boid singleBoid = new Boid(1000, 1000, 1000, 1000);
+        Vector alignmentAdjustment = new Vector(0.5, 0.5);
+        // current ALIGNMENT_RATE is 1 / 8
+        alignmentAdjustment = alignmentAdjustment.multiply(1.0 / 8);
+        assertEquals(singleBoid.alignmentRule(someBoids), alignmentAdjustment);
     }
 }

@@ -43,6 +43,12 @@ public class Boid {
         return massCenter.multiply(COHESION_RATE);
     }
 
+    /** calculates the average velocity of neraby boids and adjusts velocity vector to match
+     * this average by some ALIGNMENT_RATE. Returns the adjustment to the boid's velocity vector
+     * that should be added to its current velocity vector
+     * @param proximityBoids
+     * @return
+     */
     public Vector alignmentRule(ArrayList<Boid> proximityBoids) {
         Vector avgVel = new Vector();
         for (Boid boid: proximityBoids) {
@@ -52,6 +58,11 @@ public class Boid {
         return avgVel.multiply(ALIGNMENT_RATE);
     }
 
+    /** returns velocity vector to adjust boid's velocity to move away from nearby boids
+     * that are within TOO_CLOSE_DISTANCE distance away
+     * @param proximityBoids
+     * @return
+     */
     public Vector separationRule(ArrayList<Boid> proximityBoids) {
         Vector separationVel = new Vector();
         for (Boid boid: proximityBoids) {
@@ -62,6 +73,8 @@ public class Boid {
         }
         return separationVel;
     }
+
+    public ArrayList<Boid> nearbyBoids()
 
     public boolean equals(Object o) {
         Boid other = (Boid) o;

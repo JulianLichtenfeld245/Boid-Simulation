@@ -4,7 +4,7 @@ We gonna make some boids
 
 #Classes
 JULIAN Boid: Vector position, Vector velocity
-methods change above values based on boids array from check proximity
+methods change above values based on boids array from nearbyBoids
 set (set or list or nearby boids not including self boid)
     methods: separationRule, alignmentRule, cohesionRule, proximityBoids
 Each boid represented by a jpeg, has center position, use StdDraw.picutre

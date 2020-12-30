@@ -101,4 +101,23 @@ public class Tests {
         assertTrue(boid4.getBOIDS().contains(boid3));
         System.out.println(boid1.getBOIDS().toString());
     }
+
+    @Test
+    public void nearbyBoidsTest() {
+        Boid boid1 = new Boid(0, 0, 0, 0);
+        Boid boid2 = new Boid(1, 0, 0, 0);
+        Boid boid3 = new Boid(0, 1, 0, 0);
+        Boid boid4 = new Boid(1, 1, 0, 0);
+        Boid boid5 = new Boid(1000, 1, 0, 0);
+        Boid boid6 = new Boid(0, 400, 0, 0);
+        Boid boid7 = new Boid(20, 450, 0, 0);
+        assertTrue(boid1.nearbyBoids().contains(boid2));
+        assertTrue(boid2.nearbyBoids().contains(boid1));
+        assertTrue(boid1.nearbyBoids().contains(boid3));
+        assertTrue(boid1.nearbyBoids().contains(boid4));
+        assertTrue(boid4.nearbyBoids().contains(boid3));
+        assertTrue(boid5.nearbyBoids().isEmpty());
+        assertTrue(boid7.nearbyBoids().contains(boid6));
+        assertTrue(boid6.nearbyBoids().contains(boid7));
+    }
 }

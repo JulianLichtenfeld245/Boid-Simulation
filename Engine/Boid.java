@@ -8,6 +8,7 @@ public class Boid {
     private static double COHESION_RATE = 1.0 / 100;
     private static double ALIGNMENT_RATE = 1.0 / 8;
     private static double TOO_CLOSE_DISTANCE = 10;
+    private static double NEARBY_BOID_RADIUS = 100;
     private static ArrayList<Boid> BOIDS = new ArrayList<>();
 
     public Boid(Vector pos, Vector vel) {
@@ -31,40 +32,40 @@ public class Boid {
     /** calculates the center of mass of nearby boids and adjusts velocity vector to match
      * center of mass by COSHESION_RATE. Returns the adjustment to the boid's velocity vector
      * that should be added to its current velocity vector
-     * @param proximityBoids
+     * @param nearbyBoids
      */
-    public Vector cohesionRule(ArrayList<Boid> proximityBoids) {
+    public Vector cohesionRule(ArrayList<Boid> nearbyBoids) {
         Vector massCenter = new Vector();
-        for (Boid boid: proximityBoids) {
+        for (Boid boid: nearbyBoids) {
             massCenter = massCenter.add(boid.getPosition());
         }
-        massCenter = massCenter.multiply(1.0 / proximityBoids.size());
+        massCenter = massCenter.multiply(1.0 / nearbyBoids.size());
         return massCenter.multiply(COHESION_RATE);
     }
 
     /** calculates the average velocity of neraby boids and adjusts velocity vector to match
      * this average by some ALIGNMENT_RATE. Returns the adjustment to the boid's velocity vector
      * that should be added to its current velocity vector
-     * @param proximityBoids
+     * @param nearbyBoids
      * @return
      */
-    public Vector alignmentRule(ArrayList<Boid> proximityBoids) {
+    public Vector alignmentRule(ArrayList<Boid> nearbyBoids) {
         Vector avgVel = new Vector();
-        for (Boid boid: proximityBoids) {
+        for (Boid boid: nearbyBoids) {
             avgVel = avgVel.add(boid.getVelocity());
         }
-        avgVel = avgVel.multiply(1.0 / proximityBoids.size());
+        avgVel = avgVel.multiply(1.0 / nearbyBoids.size());
         return avgVel.multiply(ALIGNMENT_RATE);
     }
 
     /** returns velocity vector to adjust boid's velocity to move away from nearby boids
      * that are within TOO_CLOSE_DISTANCE distance away
-     * @param proximityBoids
+     * @param nearbyBoids
      * @return
      */
-    public Vector separationRule(ArrayList<Boid> proximityBoids) {
+    public Vector separationRule(ArrayList<Boid> nearbyBoids) {
         Vector separationVel = new Vector();
-        for (Boid boid: proximityBoids) {
+        for (Boid boid: nearbyBoids) {
             double dist = getPosition().distance(boid.getPosition());
             if (dist < TOO_CLOSE_DISTANCE) {
                 separationVel = separationVel.add(getPosition().subtract(boid.getPosition()));
@@ -83,7 +84,15 @@ public class Boid {
 //        ex:
 //        circle = circleAroundBoid()
 //        return rangeSearch(BOIDS, circle)
-        return null;
+        // naiveNearbyBoids below needs to be replaced with more efficient version, KD Tree maybe with range
+        // searching, but we want it to be able to handle 3 dimensions as well?
+        ArrayList<Boid> nearby = new ArrayList<>();
+        for (Boid boid: BOIDS) {
+            if (boid != this && boid.getPosition().distance(getPosition()) < NEARBY_BOID_RADIUS) {
+                nearby.add(boid);
+            }
+        }
+        return nearby;
     }
 
     public boolean equals(Object o) {

@@ -57,6 +57,6 @@ public class Vector {
     }
 
     public String toString() {
-        return "Vector (" + Double.toString(x) + ", " + Double.toString(y) + ")";
+        return "(" + Double.toString(x) + ", " + Double.toString(y) + ")";
     }
 }

@@ -8,17 +8,16 @@ public class Boid {
     private static double COHESION_RATE = 1.0 / 100;
     private static double ALIGNMENT_RATE = 1.0 / 8;
     private static double TOO_CLOSE_DISTANCE = 10;
+    private static ArrayList<Boid> BOIDS = new ArrayList<>();
 
     public Boid(Vector pos, Vector vel) {
         position = pos;
         velocity = vel;
+        BOIDS.add(this);
     }
 
     public Boid(double posX, double posY, double velX, double velY) {
-        Vector pos = new Vector(posX, posY);
-        Vector vel = new Vector(velX, velY);
-        position = pos;
-        velocity = vel;
+        this(new Vector(posX, posY), new Vector(velX, velY));
     }
 
     public Vector getPosition() {
@@ -74,7 +73,18 @@ public class Boid {
         return separationVel;
     }
 
-    public ArrayList<Boid> nearbyBoids()
+    public ArrayList<Boid> getBOIDS() {
+        return BOIDS;
+    }
+
+    public ArrayList<Boid> nearbyBoids() {
+//        need a good algorithm for range search and can then specify a circle around the boid to include
+//        in nearbyBoids
+//        ex:
+//        circle = circleAroundBoid()
+//        return rangeSearch(BOIDS, circle)
+        return null;
+    }
 
     public boolean equals(Object o) {
         Boid other = (Boid) o;

@@ -1,5 +1,6 @@
 package Engine;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -82,5 +83,22 @@ public class Tests {
         Boid closeLeftBoid = new Boid(-1, 0, 0, 0);
         Vector separationAdjustment2 = new Vector(-5, 0);
         assertEquals(separationAdjustment2, closeLeftBoid.separationRule(someBoids2));
+    }
+
+    @Test
+    public void boidsAddedToSameList() {
+        Boid boid1 = new Boid(0, 0, 0, 0);
+        Boid boid2 = new Boid(1, 0, 0, 0);
+        Boid boid3 = new Boid(0, 1, 0, 0);
+        Boid boid4 = new Boid(1, 1, 0, 0);
+        assertSame(boid1.getBOIDS(), boid2.getBOIDS());
+        assertSame(boid1.getBOIDS(), boid3.getBOIDS());
+        assertSame(boid1.getBOIDS(), boid4.getBOIDS());
+        assertTrue(boid1.getBOIDS().contains(boid2));
+        assertTrue(boid2.getBOIDS().contains(boid1));
+        assertTrue(boid1.getBOIDS().contains(boid3));
+        assertTrue(boid1.getBOIDS().contains(boid4));
+        assertTrue(boid4.getBOIDS().contains(boid3));
+        System.out.println(boid1.getBOIDS().toString());
     }
 }

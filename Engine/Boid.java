@@ -9,6 +9,8 @@ public class Boid {
     private static double ALIGNMENT_RATE = 1.0 / 8;
     private static double TOO_CLOSE_DISTANCE = 10;
     private static double NEARBY_BOID_RADIUS = 100;
+    // may want to have a Boids class with methods getBoids and addBoid so that we can have different
+    // types of boids on one screen
     private static ArrayList<Boid> BOIDS = new ArrayList<>();
 
     public Boid(Vector pos, Vector vel) {
@@ -93,6 +95,16 @@ public class Boid {
             }
         }
         return nearby;
+    }
+
+    public void updateBoid() {
+        ArrayList<Boid> nearbyBoids = nearbyBoids();
+        // apply all rules to boid
+        Vector v1 = cohesionRule(nearbyBoids);
+        Vector v2 = alignmentRule(nearbyBoids);
+        Vector v3 = separationRule(nearbyBoids);
+        velocity = getVelocity().add(v1).add(v2).add(v3);
+        position = getPosition().add(getVelocity());
     }
 
     public boolean equals(Object o) {

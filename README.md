@@ -8,6 +8,8 @@ methods change above values based on boids array from nearbyBoids
 set (set or list or nearby boids not including self boid)
     methods: separationRule, alignmentRule, cohesionRule, proximityBoids
 Each boid represented by a jpeg, has center position, use StdDraw.picutre
+Flock: a group of boids, how should we have newly created boids added to a flock?
+    methods: add(boid)
 JULIAN Vector: x,y; can be position or change in position between frames
     methods: add(vectorA, vectorB), subtract(vectorA, vectorB)
 Main: arrayList of Boids,

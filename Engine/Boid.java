@@ -5,22 +5,21 @@ import java.util.ArrayList;
 public class Boid {
     private Vector position;
     private Vector velocity;
+    private Flock myFlock;
     private static double COHESION_RATE = 1.0 / 100;
     private static double ALIGNMENT_RATE = 1.0 / 8;
     private static double TOO_CLOSE_DISTANCE = 10;
     private static double NEARBY_BOID_RADIUS = 100;
-    // may want to have a Boids class with methods getBoids and addBoid so that we can have different
-    // types of boids on one screen
-    private static ArrayList<Boid> BOIDS = new ArrayList<>();
 
-    public Boid(Vector pos, Vector vel) {
+    public Boid(Vector pos, Vector vel, Flock flock) {
         position = pos;
         velocity = vel;
-        BOIDS.add(this);
+        myFlock = flock;
+        flock.add(this);
     }
 
-    public Boid(double posX, double posY, double velX, double velY) {
-        this(new Vector(posX, posY), new Vector(velX, velY));
+    public Boid(double posX, double posY, double velX, double velY, Flock flock) {
+        this(new Vector(posX, posY), new Vector(velX, velY), flock);
     }
 
     public Vector getPosition() {
@@ -76,8 +75,15 @@ public class Boid {
         return separationVel;
     }
 
-    public ArrayList<Boid> getBOIDS() {
-        return BOIDS;
+    public Flock getMyFlock() {
+        return myFlock;
+    }
+
+    /** returns the boids in this boid's flock not including the current boid */
+    public ArrayList<Boid> getBoids() {
+        ArrayList<Boid> boids = new ArrayList<>(getMyFlock().getBoids());
+        boids.remove(this);
+        return boids;
     }
 
     public ArrayList<Boid> nearbyBoids() {
@@ -89,7 +95,7 @@ public class Boid {
         // naiveNearbyBoids below needs to be replaced with more efficient version, KD Tree maybe with range
         // searching, but we want it to be able to handle 3 dimensions as well?
         ArrayList<Boid> nearby = new ArrayList<>();
-        for (Boid boid: BOIDS) {
+        for (Boid boid: getBoids()) {
             if (boid != this && boid.getPosition().distance(getPosition()) < NEARBY_BOID_RADIUS) {
                 nearby.add(boid);
             }

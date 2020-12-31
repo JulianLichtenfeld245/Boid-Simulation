@@ -9,8 +9,9 @@ public class Main {
     private static int SCREEN_WIDTH = 100;
     private static int SCREEN_HEIGHT = 100;
 
-    private static void addInitialBoids() {
-        int numBoids = rand.nextInt();
+    /** adds random number of boids with random positions and velocities to flock */
+    private static void addInitialBoids(Flock flock) {
+        int numBoids = rand.nextInt(10);
         int posMax = 100;
         int velMax = 10;
         for (int i = 0; i < numBoids; i ++) {
@@ -18,7 +19,7 @@ public class Main {
             double yPos = rand.nextInt(posMax + posMax) - posMax;
             double xVel = rand.nextInt(velMax + velMax) - velMax;
             double yVel = rand.nextInt(velMax + velMax) - velMax;
-            new Boid(xPos, yPos, xVel, yVel);
+            new Boid(xPos, yPos, xVel, yVel, flock);
         }
     }
 
@@ -26,17 +27,12 @@ public class Main {
 
     }
 
-    public static void updateBoids() {
-//        for (Boid boid: Boids) {
-//            boid.updateBoid();
-//        }
-    }
-
     public static void main(String[] args) {
-        addInitialBoids();
+        Flock flock = new Flock();
+        addInitialBoids(flock);
         while (true) {
             drawBoids();
-            updateBoids();
+            flock.updateBoids();
         }
     }
 }

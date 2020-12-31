@@ -27,90 +27,90 @@ public class Tests {
         System.out.println(vector1);
         System.out.println("Above should read Vector (2.0, 4.0)");
     }
+    // the commented tests are outdated but i don't wanna get rid of them quite yet
+//
+//    @Test
+//    public void simpleCohesionRuleTest() {
+//        Flock flock = new Flock();
+//        new Boid(0, 0, 0, 0, flock);
+//        new Boid(1, 0, 0, 0, flock);
+//        new Boid(1, 1, 0, 0, flock);
+//        new Boid(0, 1, 0, 0, flock);
+//        Boid singleBoid = new Boid(1000, 1000, 1000, 1000, flock);
+//        Vector cohesionAdjustment = new Vector(0.5, 0.5);
+//        // current COHESION_RATE is 1 / 100
+//        cohesionAdjustment = cohesionAdjustment.multiply(1.0 / 100);
+//        assertEquals(cohesionAdjustment, singleBoid.cohesionRule(flock.getBoids()));
+//    }
 
-    @Test
-    public void simpleCohesionRuleTest() {
-        ArrayList<Boid> someBoids = new ArrayList<>();
-        someBoids.add(new Boid(0, 0, 0, 0));
-        someBoids.add(new Boid(1, 0, 0, 0));
-        someBoids.add(new Boid(1, 1, 0, 0));
-        someBoids.add(new Boid(0, 1, 0, 0));
-        Boid singleBoid = new Boid(1000, 1000, 1000, 1000);
-        Vector cohesionAdjustment = new Vector(0.5, 0.5);
-        // current COHESION_RATE is 1 / 100
-        cohesionAdjustment = cohesionAdjustment.multiply(1.0 / 100);
-        assertEquals(cohesionAdjustment, singleBoid.cohesionRule(someBoids));
-    }
-
-    @Test
-    public void simpleAlignmentRuleTest() {
-        ArrayList<Boid> someBoids = new ArrayList<>();
-        someBoids.add(new Boid(0, 0, 0, 0));
-        someBoids.add(new Boid(0, 0, 1, 0));
-        someBoids.add(new Boid(0, 0, 1, 1));
-        someBoids.add(new Boid(0, 0, 0, 1));
-        Boid singleBoid = new Boid(1000, 1000, 1000, 1000);
-        Vector alignmentAdjustment = new Vector(0.5, 0.5);
-        // current ALIGNMENT_RATE is 1 / 8
-        alignmentAdjustment = alignmentAdjustment.multiply(1.0 / 8);
-        assertEquals(alignmentAdjustment, singleBoid.alignmentRule(someBoids));
-    }
-
-    @Test
-    public void simpleSeparationRuleTest() {
-        ArrayList<Boid> someBoids = new ArrayList<>();
-        someBoids.add(new Boid(0, 0, 0, 0));
-        someBoids.add(new Boid(1, 0, 0, 0));
-        someBoids.add(new Boid(1, 1, 0, 0));
-        someBoids.add(new Boid(0, 1, 0, 0));
-        Boid farBoid = new Boid(1000, 1000, 1000, 1000);
-        Vector noSeparationAdjustment = new Vector(0, 0);
-        assertEquals(noSeparationAdjustment, farBoid.separationRule(someBoids));
-        // boid below shouldn't have sepeartionAdjustment bc there are boids that cancel each
-        // other's separationAdjustment
-        Boid closeCenterBoid = new Boid(0.5, 0.5, 0 ,0);
-        assertEquals(noSeparationAdjustment, closeCenterBoid.separationRule(someBoids));
-        // should move right (+x value) bc of birds to left (at 0,0 and 0,1)
-        Boid closeRightBoid = new Boid(1, 0.5, 0, 0);
-        Vector separationAdjustment = new Vector(2, 0);
-        assertEquals(separationAdjustment, closeRightBoid.separationRule(someBoids));
-        ArrayList<Boid> someBoids2 = new ArrayList<>();
-        someBoids2.add(new Boid(0, 1, 0, 0));
-        someBoids2.add(new Boid(0, 0, 0, 0));
-        someBoids2.add(new Boid(0, -1, 0, 0));
-        someBoids2.add(new Boid(0, 2, 0, 0));
-        someBoids2.add(new Boid(0, -2, 0, 0));
-        Boid closeLeftBoid = new Boid(-1, 0, 0, 0);
-        Vector separationAdjustment2 = new Vector(-5, 0);
-        assertEquals(separationAdjustment2, closeLeftBoid.separationRule(someBoids2));
-    }
+//    @Test
+//    public void simpleAlignmentRuleTest() {
+//        Flock flock = new Flock();
+//        new Boid(0, 0, 0, 0, flock);
+//        new Boid(0, 0, 1, 0, flock);
+//        new Boid(0, 0, 1, 1, flock);
+//        new Boid(0, 0, 0, 1, flock);
+//        Boid singleBoid = new Boid(0.4, 0.4, 1000, 1000, flock);
+//        Vector alignmentAdjustment = new Vector(0.5, 0.5);
+//        // current ALIGNMENT_RATE is 1 / 8
+//        alignmentAdjustment = alignmentAdjustment.multiply(1.0 / 8);
+//        assertEquals(alignmentAdjustment, singleBoid.alignmentRule(singleBoid.getBoids()));
+//    }
+//
+//    @Test
+//    public void simpleSeparationRuleTest() {
+//        Flock flock = new Flock();
+//        new Boid(0, 0, 0, 0, flock);
+//        new Boid(1, 0, 0, 0, flock);
+//        new Boid(1, 1, 0, 0, flock);
+//        new Boid(0, 1, 0, 0, flock);
+//        Boid farBoid = new Boid(1000, 1000, 1000, 1000, flock);
+//        Vector noSeparationAdjustment = new Vector(0, 0);
+//        assertEquals(noSeparationAdjustment, farBoid.separationRule(farBoid.getBoids()));
+//        // boid below shouldn't have sepeartionAdjustment bc there are boids that cancel each
+//        // other's separationAdjustment
+//        Boid closeCenterBoid = new Boid(0.5, 0.5, 0 ,0, flock);
+//        assertEquals(noSeparationAdjustment, closeCenterBoid.separationRule(closeCenterBoid.getBoids()));
+//        // should move right (+x value) bc of birds to left (at 0,0 and 0,1)
+//        Boid closeRightBoid = new Boid(1, 0.5, 0, 0, flock);
+//        Vector separationAdjustment = new Vector(2, 0);
+//        assertEquals(separationAdjustment, closeRightBoid.separationRule(closeRightBoid.getBoids()));
+//        Flock flock2 = new Flock();
+//        new Boid(0, 1, 0, 0,flock2);
+//        new Boid(0, 0, 0, 0, flock2);
+//        new Boid(0, -1, 0, 0, flock2);
+//        new Boid(0, 2, 0, 0, flock2);
+//        new Boid(0, -2, 0, 0, flock2);
+//        Boid closeLeftBoid = new Boid(-1, 0, 0, 0, flock2);
+//        Vector separationAdjustment2 = new Vector(-5, 0);
+//        assertEquals(separationAdjustment2, closeLeftBoid.separationRule(closeLeftBoid.getBoids()));
+//    }
 
     @Test
     public void boidsAddedToSameList() {
-        Boid boid1 = new Boid(0, 0, 0, 0);
-        Boid boid2 = new Boid(1, 0, 0, 0);
-        Boid boid3 = new Boid(0, 1, 0, 0);
-        Boid boid4 = new Boid(1, 1, 0, 0);
-        assertSame(boid1.getBOIDS(), boid2.getBOIDS());
-        assertSame(boid1.getBOIDS(), boid3.getBOIDS());
-        assertSame(boid1.getBOIDS(), boid4.getBOIDS());
-        assertTrue(boid1.getBOIDS().contains(boid2));
-        assertTrue(boid2.getBOIDS().contains(boid1));
-        assertTrue(boid1.getBOIDS().contains(boid3));
-        assertTrue(boid1.getBOIDS().contains(boid4));
-        assertTrue(boid4.getBOIDS().contains(boid3));
-        System.out.println(boid1.getBOIDS().toString());
+        Flock flock = new Flock();
+        Boid boid1 = new Boid(0, 0, 0, 0, flock);
+        Boid boid2 = new Boid(1, 0, 0, 0, flock);
+        Boid boid3 = new Boid(0, 1, 0, 0, flock);
+        Boid boid4 = new Boid(1, 1, 0, 0, flock);
+        assertSame(flock.getBoids(), flock.getBoids());
+        assertTrue(flock.getBoids().contains(boid1));
+        assertTrue(flock.getBoids().contains(boid2));
+        assertTrue(flock.getBoids().contains(boid3));
+        assertTrue(flock.getBoids().contains(boid4));
+        System.out.println(boid1.getBoids().toString());
     }
 
     @Test
     public void nearbyBoidsTest() {
-        Boid boid1 = new Boid(0, 0, 0, 0);
-        Boid boid2 = new Boid(1, 0, 0, 0);
-        Boid boid3 = new Boid(0, 1, 0, 0);
-        Boid boid4 = new Boid(1, 1, 0, 0);
-        Boid boid5 = new Boid(1000, 1, 0, 0);
-        Boid boid6 = new Boid(0, 400, 0, 0);
-        Boid boid7 = new Boid(20, 450, 0, 0);
+        Flock flock = new Flock();
+        Boid boid1 = new Boid(0, 0, 0, 0, flock);
+        Boid boid2 = new Boid(1, 0, 0, 0, flock);
+        Boid boid3 = new Boid(0, 1, 0, 0, flock);
+        Boid boid4 = new Boid(1, 1, 0, 0, flock);
+        Boid boid5 = new Boid(1000, 1, 0, 0, flock);
+        Boid boid6 = new Boid(0, 400, 0, 0, flock);
+        Boid boid7 = new Boid(20, 450, 0, 0, flock);
         assertTrue(boid1.nearbyBoids().contains(boid2));
         assertTrue(boid2.nearbyBoids().contains(boid1));
         assertTrue(boid1.nearbyBoids().contains(boid3));
@@ -119,5 +119,20 @@ public class Tests {
         assertTrue(boid5.nearbyBoids().isEmpty());
         assertTrue(boid7.nearbyBoids().contains(boid6));
         assertTrue(boid6.nearbyBoids().contains(boid7));
+    }
+
+    @Test
+    public void cohesionTest() {
+        Flock flock = new Flock();
+        new Boid(0, 0, 0, 0, flock);
+        new Boid(1, 0, 0, 0, flock);
+        new Boid(1, 1, 0, 0, flock);
+        new Boid(0, 1, 0, 0, flock);
+        Boid singleBoid = new Boid(20, 0, 0, 0, flock);
+        Vector cohesionAdjustment = new Vector(0.5 - 20, 0.5);
+        // current COHESION_RATE is 1 / 100
+        cohesionAdjustment = cohesionAdjustment.multiply(1.0 / 100);
+        flock.updateBoids();
+        assertEquals(cohesionAdjustment, singleBoid.getVelocity());
     }
 }

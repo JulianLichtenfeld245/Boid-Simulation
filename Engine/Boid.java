@@ -3,8 +3,8 @@ package Engine;
 import java.util.ArrayList;
 
 public class Boid {
-    private Vector position;
-    private Vector velocity;
+    public Vector position;
+    public Vector velocity;
     private Flock myFlock;
     private static double COHESION_RATE = 1.0 / 100;
     private static double ALIGNMENT_RATE = 1.0 / 8;
@@ -41,7 +41,8 @@ public class Boid {
             massCenter = massCenter.add(boid.getPosition());
         }
         massCenter = massCenter.multiply(1.0 / nearbyBoids.size());
-        return massCenter.multiply(COHESION_RATE);
+        Vector cohesionAdjument = massCenter.subtract(getPosition());
+        return cohesionAdjument.multiply(COHESION_RATE);
     }
 
     /** calculates the average velocity of neraby boids and adjusts velocity vector to match
@@ -56,7 +57,8 @@ public class Boid {
             avgVel = avgVel.add(boid.getVelocity());
         }
         avgVel = avgVel.multiply(1.0 / nearbyBoids.size());
-        return avgVel.multiply(ALIGNMENT_RATE);
+        Vector alignmentAdjustment = avgVel.subtract(getVelocity());
+        return alignmentAdjustment.multiply(ALIGNMENT_RATE);
     }
 
     /** returns velocity vector to adjust boid's velocity to move away from nearby boids

@@ -21,9 +21,31 @@ public class Flock {
         return boids;
     }
 
-    public void updateBoids() {
+    public void updateBoidsAlt() {
         for (Boid boid: getBoids()) {
             boid.updateBoid();
+        }
+    }
+
+    /** Ok this is probably pretty janky but I haven't thought of a better solution
+     * to update the boids yet. AUD let me know if you think of anything!
+     */
+    public void updateBoids() {
+        // array of new velocities in order of the boids in the flock
+        ArrayList<Vector> newVelocities = new ArrayList<>();
+        ArrayList<Boid> boids = getBoids();
+        for (Boid boid: boids) {
+            ArrayList<Boid> nearbyBoids = boid.nearbyBoids();
+            Vector v1 = boid.cohesionRule(nearbyBoids);
+            Vector v2 = boid.alignmentRule(nearbyBoids);
+            Vector v3 = boid.separationRule(nearbyBoids);
+            newVelocities.add(boid.getVelocity().add(v1).add(v2).add(v3));
+        }
+        for (int i = 0; i < newVelocities.size(); i ++) {
+            Boid boid = boids.get(i);
+            Vector newVelocity = newVelocities.get(i);
+            boid.position = boid.getPosition().add(boid.getVelocity());
+            boid.velocity = newVelocity;
         }
     }
 }

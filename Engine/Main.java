@@ -28,11 +28,16 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        Flock flock = new Flock();
-        addInitialBoids(flock);
-        while (true) {
-            drawBoids();
-            flock.updateBoids();
-        }
+//        Flock flock = new Flock();
+//        addInitialBoids(flock);
+//        while (true) {
+//            drawBoids();
+//            flock.updateBoids();
+//        }
+        StdDraw.setPenRadius(0.05);
+        StdDraw.setPenColor(StdDraw.BLUE);
+        StdDraw.point(0.5, 0.5);
+        StdDraw.setPenColor(StdDraw.MAGENTA);
+        StdDraw.line(0.2, 0.2, 0.8, 0.2);
     }
 }

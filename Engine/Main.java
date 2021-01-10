@@ -36,10 +36,6 @@ public class Main {
     public static void main(String[] args) {
         Flock flock = new Flock();
         addInitialBoids(flock);
-        /*while (true) {
-            drawBoids();
-            flock.updateBoids();
-        }*/
 
         StdDraw.setCanvasSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         StdDraw.setScale(-2, +2);

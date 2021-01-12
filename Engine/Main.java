@@ -6,6 +6,7 @@ import java.util.Random;
 
 public class Main {
     private static Random rand = new Random();
+    // aud feel free to change the size back
     private static int SCREEN_WIDTH = 512;
     private static int SCREEN_HEIGHT = 512;
 
@@ -24,12 +25,19 @@ public class Main {
     }
 
     public static void drawBoids(Flock thisFlock) {
-        double x;
-        double y;
+        double xPos;
+        double yPos;
+        double xVel;
+        double yVel;
         for(int i = 0; i < thisFlock.getBoids().size(); i++){
-            x = thisFlock.getBoids().get(i).position.getX()*0.1;
-            y = thisFlock.getBoids().get(i).position.getY()*0.1;
-            StdDraw.picture(x,y,"Engine/boid.png");
+            xPos = thisFlock.getBoids().get(i).position.getX()*0.1;
+            yPos = thisFlock.getBoids().get(i).position.getY()*0.1;
+            // to have boid in right direction
+            xVel = thisFlock.getBoids().get(i).getVelocity().getX();
+            yVel = thisFlock.getBoids().get(i).getVelocity().getY();
+            double radians = Math.atan(yVel / xVel);
+            double degrees = radians * 180 / Math.PI;
+            StdDraw.picture(xPos,yPos,"Engine/boid.png", degrees);
         }
     }
 

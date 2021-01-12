@@ -175,4 +175,10 @@ public class Tests {
         StdDraw.setPenColor(StdDraw.MAGENTA);
         StdDraw.line(0.2, 0.2, 0.8, 0.2);
     }
+
+    @Test
+    public void arctanTest() {
+        double degree = Math.atan(-1);
+        System.out.println(degree * 180 / Math.PI);
+    }
 }

@@ -138,6 +138,36 @@ public class Tests {
     }
 
     @Test
+    public void alignmentTest() {
+        Flock flock = new Flock();
+        new Boid(0, 0, 0, 1, flock);
+        new Boid(40, 0, 1, 1, flock);
+        new Boid(40, 40, 0, 1, flock);
+        new Boid(0, 40, -1, 1, flock);
+        Vector singleVel = new Vector(10, 10);
+        Boid singleBoid = new Boid(new Vector(20, 20), singleVel, flock);
+        Vector avgVel = new Vector(0, 1);
+        // current ALIGNMENT_RATE is 1 / 8
+        Vector alignmentAdjustment = avgVel.subtract(singleVel).multiply(1.0 / 8);
+        Vector newSingleVel = singleVel.add(alignmentAdjustment);
+        flock.updateBoids();
+        assertEquals(newSingleVel, singleBoid.getVelocity());
+    }
+
+    @Test
+    public void separationTest() {
+        Flock flock = new Flock();
+        new Boid(1, 1, 0, 0, flock);
+        Boid singleBoid = new Boid(1, 2, 0, 0, flock);
+        Vector separationAdjustment = new Vector(1 - 1, 2 - 1);
+        Vector cohesionAdjustment = new Vector(1 - 1, 1 - 2);
+        cohesionAdjustment = cohesionAdjustment.multiply(1.0 / 100);
+        Vector newSingleVel = separationAdjustment.add(cohesionAdjustment);
+        flock.updateBoids();
+        assertEquals(newSingleVel, singleBoid.getVelocity());
+    }
+
+    @Test
     public void stdDrawTest() {
         StdDraw.setPenRadius(0.05);
         StdDraw.setPenColor(StdDraw.BLUE);

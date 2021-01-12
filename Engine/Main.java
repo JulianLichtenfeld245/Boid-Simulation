@@ -44,7 +44,8 @@ public class Main {
         for (double t = 0.0; true; t += 0.02) {
             StdDraw.clear();
             drawBoids(flock);
-            flock.updateBoids();;
+            flock.updateBoids();
+            StdDraw.pause(200);
             StdDraw.show();
             StdDraw.pause(30);
         }

@@ -10,9 +10,10 @@ public class Boid {
     public Vector velocity;
     private Flock myFlock;
     private static double GRID_LENGTH = 1.0;
-    private static double COHESION_RATE = 1.0 / 50;
-    private static double ALIGNMENT_RATE = 1.0 / 40;
-//    private static double COHESION_RATE = 0;
+    private static double COHESION_RATE = 1.0 / 100;
+    private static double ALIGNMENT_RATE = 1.0 / 10;
+    private static double TOO_CLOSE_RATE = 1.0 / 2;
+    //    private static double COHESION_RATE = 0;
 //    private static double ALIGNMENT_RATE = 0;
     private static double TOO_CLOSE_DISTANCE = GRID_LENGTH / 20;
     private static double NEARBY_BOID_RADIUS = GRID_LENGTH / 4;
@@ -87,6 +88,7 @@ public class Boid {
                 separationVel = separationVel.add(getPosition().subtract(boid.getPosition()));
             }
         }
+        separationVel = separationVel.multiply(TOO_CLOSE_RATE);
         return separationVel;
     }
 

@@ -65,7 +65,7 @@ public class Main {
             flock.updateBoids();
             StdDraw.pause(20);
             StdDraw.show();
-            StdDraw.pause(30);
+            StdDraw.pause(20);
         }
     }
 }

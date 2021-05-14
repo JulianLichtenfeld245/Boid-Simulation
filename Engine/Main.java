@@ -17,7 +17,7 @@ public class Main {
         int numBoids = rand.nextInt(10);
         double posMin = 0.1;
         double posMax = .9;
-        double velMax = 0.1;
+        double velMax = 0.01;
         for (int i = 0; i < numBoids; i ++) {
             // get random values for pos and vel between posMin and posMax or -velMax and velMax
             // since grid space is between -2 and 2

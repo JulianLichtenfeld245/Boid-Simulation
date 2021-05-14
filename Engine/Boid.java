@@ -10,17 +10,17 @@ public class Boid {
     public Vector velocity;
     private Flock myFlock;
     private static double GRID_LENGTH = 1.0;
-    private static double COHESION_RATE = 1.0 / 90;
-    private static double ALIGNMENT_RATE = 1.0 / 50;
+    private static double COHESION_RATE = 1.0 / 150;
+    private static double ALIGNMENT_RATE = 1.0 / 70;
 //    private static double COHESION_RATE = 0;
 //    private static double ALIGNMENT_RATE = 0;
     private static double TOO_CLOSE_DISTANCE = GRID_LENGTH / 20;
     private static double NEARBY_BOID_RADIUS = 100;
     // when its w/in 1/20 of the grid length (4x4) from the wall
-    private static double tooClosetoWall = GRID_LENGTH / 10;
-    private static double wallAdjustAmount = .01;
-    private static double AVOID_WALL_RATE = GRID_LENGTH / 30;
-    private static double SPEED_LIMIT = .5;
+    private static double tooClosetoWall = GRID_LENGTH / 8;
+    private static double wallAdjustAmount = GRID_LENGTH;
+    private static double AVOID_WALL_RATE = GRID_LENGTH / 70;
+    private static double SPEED_LIMIT = GRID_LENGTH / 40;
 
     public Boid(Vector pos, Vector vel, Flock flock) {
         position = pos;
@@ -94,16 +94,20 @@ public class Boid {
         Vector avoidWallVel = new Vector();
         // how long grid is from center to a side
         if (position.getX() < tooClosetoWall) {
-            avoidWallVel = avoidWallVel.subtract(new Vector(getPosition().getX() - GRID_LENGTH, 0));
+            avoidWallVel = new Vector(wallAdjustAmount, 0);
+//            avoidWallVel = avoidWallVel.subtract(new Vector(getPosition().getX() - GRID_LENGTH, 0));
         }
         else if (position.getX() > GRID_LENGTH - tooClosetoWall) {
-            avoidWallVel = avoidWallVel.subtract(new Vector(getPosition().getX(), 0));
+            avoidWallVel = new Vector(-wallAdjustAmount, 0);
+//            avoidWallVel = avoidWallVel.subtract(new Vector(getPosition().getX(), 0));
         }
         if (position.getY() < tooClosetoWall) {
-            avoidWallVel = avoidWallVel.subtract(new Vector(0, getPosition().getY() - GRID_LENGTH));
+            avoidWallVel = new Vector(0, wallAdjustAmount);
+//            avoidWallVel = avoidWallVel.subtract(new Vector(0, getPosition().getY() - GRID_LENGTH));
         }
         else if (position.getY() > GRID_LENGTH - tooClosetoWall) {
-            avoidWallVel = avoidWallVel.subtract(new Vector(0, getPosition().getY()));
+            avoidWallVel = new Vector(0, -wallAdjustAmount);
+//            avoidWallVel = avoidWallVel.subtract(new Vector(0, getPosition().getY()));
         }
         return avoidWallVel.multiply(AVOID_WALL_RATE);
     }

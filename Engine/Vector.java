@@ -1,5 +1,7 @@
 package Engine;
 
+import java.util.ArrayList;
+
 public class Vector {
     private double x;
     private double y;
@@ -28,6 +30,14 @@ public class Vector {
         double xSum = getX() + otherVector.getX();
         double ySum = getY() + otherVector.getY();
         return new Vector(xSum, ySum);
+    }
+
+    public Vector add(ArrayList<Vector> vectors) {
+        Vector sum_vec = new Vector();
+        for (Vector vector: vectors) {
+            sum_vec = sum_vec.add(vector);
+        }
+        return sum_vec;
     }
 
     /** returns a new vector with x and y values equal to the value of self values minus otherVector values

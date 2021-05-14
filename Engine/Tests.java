@@ -181,4 +181,16 @@ public class Tests {
         double degree = Math.atan(-1);
         System.out.println(degree * 180 / Math.PI);
     }
+
+    @Test
+    public void whereAreYou() {
+        edu.princeton.cs.algs4.StdDraw.clear();
+        edu.princeton.cs.algs4.StdDraw.setCanvasSize(700, 700);
+        edu.princeton.cs.algs4.StdDraw.setScale(0, 1);
+        edu.princeton.cs.algs4.StdDraw.enableDoubleBuffering();
+        edu.princeton.cs.algs4.StdDraw.picture(.5,.65,"Engine/boid.png", .025, .05, 0);
+        edu.princeton.cs.algs4.StdDraw.show();
+        edu.princeton.cs.algs4.StdDraw.pause(100000);
+
+    }
 }

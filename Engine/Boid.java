@@ -2,14 +2,25 @@ package Engine;
 
 import java.util.ArrayList;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 public class Boid {
     public Vector position;
     public Vector velocity;
     private Flock myFlock;
-    private static double COHESION_RATE = 1.0 / 100;
-    private static double ALIGNMENT_RATE = 1.0 / 8;
-    private static double TOO_CLOSE_DISTANCE = 10;
+    private static double GRID_LENGTH = 1.0;
+//    private static double COHESION_RATE = 1.0 / 100;
+//    private static double ALIGNMENT_RATE = 1.0 / 20;
+    private static double COHESION_RATE = 0;
+    private static double ALIGNMENT_RATE = 0;
+    private static double TOO_CLOSE_DISTANCE = GRID_LENGTH / 20;
     private static double NEARBY_BOID_RADIUS = 100;
+    // when its w/in 1/20 of the grid length (4x4) from the wall
+    private static double tooClosetoWall = GRID_LENGTH / 10;
+    private static double wallAdjustAmount = .01;
+    private static double AVOID_WALL_RATE = GRID_LENGTH / 30;
+    private static double SPEED_LIMIT = .5;
 
     public Boid(Vector pos, Vector vel, Flock flock) {
         position = pos;
@@ -77,6 +88,30 @@ public class Boid {
         return separationVel;
     }
 
+    /** If boid gets within tooClosetoWall, then add to vel vectors so boid will move away from walls.
+     * Later, make it so they move from walls with increasing intensity as it gets closer to the wall*/
+    public Vector avoidWalls() {
+        Vector avoidWallVel = new Vector();
+        // how long grid is from center to a side
+        if (position.getX() < tooClosetoWall) {
+            avoidWallVel = avoidWallVel.subtract(new Vector(getPosition().getX() - GRID_LENGTH, 0));
+        }
+        else if (position.getX() > GRID_LENGTH - tooClosetoWall) {
+            avoidWallVel = avoidWallVel.subtract(new Vector(getPosition().getX(), 0));
+        }
+        if (position.getY() < tooClosetoWall) {
+            avoidWallVel = avoidWallVel.subtract(new Vector(0, getPosition().getY() - GRID_LENGTH));
+        }
+        else if (position.getY() > GRID_LENGTH - tooClosetoWall) {
+            avoidWallVel = avoidWallVel.subtract(new Vector(0, getPosition().getY()));
+        }
+        return avoidWallVel.multiply(AVOID_WALL_RATE);
+    }
+
+    public Vector speedLimit(Vector v) {
+        return new Vector(min(max(-SPEED_LIMIT, v.getX()), SPEED_LIMIT), min(max(-SPEED_LIMIT, v.getY()), SPEED_LIMIT));
+    }
+
     public Flock getMyFlock() {
         return myFlock;
     }
@@ -111,7 +146,8 @@ public class Boid {
         Vector v1 = cohesionRule(nearbyBoids);
         Vector v2 = alignmentRule(nearbyBoids);
         Vector v3 = separationRule(nearbyBoids);
-        velocity = getVelocity().add(v1).add(v2).add(v3);
+        Vector v4 = avoidWalls();
+        velocity = speedLimit(getVelocity().add(v1).add(v2).add(v3).add(v4));
         position = getPosition().add(getVelocity());
     }
 

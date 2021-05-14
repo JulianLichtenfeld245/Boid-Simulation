@@ -10,10 +10,10 @@ public class Boid {
     public Vector velocity;
     private Flock myFlock;
     private static double GRID_LENGTH = 1.0;
-//    private static double COHESION_RATE = 1.0 / 100;
-//    private static double ALIGNMENT_RATE = 1.0 / 20;
-    private static double COHESION_RATE = 0;
-    private static double ALIGNMENT_RATE = 0;
+    private static double COHESION_RATE = 1.0 / 90;
+    private static double ALIGNMENT_RATE = 1.0 / 50;
+//    private static double COHESION_RATE = 0;
+//    private static double ALIGNMENT_RATE = 0;
     private static double TOO_CLOSE_DISTANCE = GRID_LENGTH / 20;
     private static double NEARBY_BOID_RADIUS = 100;
     // when its w/in 1/20 of the grid length (4x4) from the wall

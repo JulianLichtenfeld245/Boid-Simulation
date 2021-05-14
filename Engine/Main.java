@@ -44,6 +44,9 @@ public class Main {
             yVel = thisFlock.getBoids().get(i).getVelocity().getY();
             double radians = Math.atan(yVel / xVel);
             double degrees = radians * 180 / Math.PI + 90;
+            if (xVel > 0) {
+                degrees += 180;
+            }
             StdDraw.picture(xPos,yPos,"Engine/boid.png", BOID_SIZE, BOID_SIZE * 2, degrees);
         }
     }

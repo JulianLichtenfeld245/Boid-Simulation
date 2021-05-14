@@ -10,17 +10,17 @@ public class Boid {
     public Vector velocity;
     private Flock myFlock;
     private static double GRID_LENGTH = 1.0;
-    private static double COHESION_RATE = 1.0 / 150;
-    private static double ALIGNMENT_RATE = 1.0 / 70;
+    private static double COHESION_RATE = 1.0 / 50;
+    private static double ALIGNMENT_RATE = 1.0 / 40;
 //    private static double COHESION_RATE = 0;
 //    private static double ALIGNMENT_RATE = 0;
     private static double TOO_CLOSE_DISTANCE = GRID_LENGTH / 20;
-    private static double NEARBY_BOID_RADIUS = 100;
+    private static double NEARBY_BOID_RADIUS = GRID_LENGTH / 4;
     // when its w/in 1/20 of the grid length (4x4) from the wall
     private static double tooClosetoWall = GRID_LENGTH / 8;
     private static double wallAdjustAmount = GRID_LENGTH;
     private static double AVOID_WALL_RATE = GRID_LENGTH / 70;
-    private static double SPEED_LIMIT = GRID_LENGTH / 40;
+    private static double SPEED_LIMIT = GRID_LENGTH / 50;
 
     public Boid(Vector pos, Vector vel, Flock flock) {
         position = pos;
@@ -51,7 +51,8 @@ public class Boid {
         for (Boid boid: nearbyBoids) {
             massCenter = massCenter.add(boid.getPosition());
         }
-        massCenter = massCenter.multiply(1.0 / nearbyBoids.size());
+        // the max w/ 1 stops bugs if nearbyBoids is empty
+        massCenter = massCenter.multiply(1.0 / max(nearbyBoids.size(), 1));
         Vector cohesionAdjument = massCenter.subtract(getPosition());
         return cohesionAdjument.multiply(COHESION_RATE);
     }
@@ -67,7 +68,8 @@ public class Boid {
         for (Boid boid: nearbyBoids) {
             avgVel = avgVel.add(boid.getVelocity());
         }
-        avgVel = avgVel.multiply(1.0 / nearbyBoids.size());
+        // the max w/ 1 stops bugs if nearbyBoids is empty
+        avgVel = avgVel.multiply(1.0 / max(nearbyBoids.size(), 1));
         Vector alignmentAdjustment = avgVel.subtract(getVelocity());
         return alignmentAdjustment.multiply(ALIGNMENT_RATE);
     }

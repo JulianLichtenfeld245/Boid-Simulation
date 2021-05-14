@@ -10,11 +10,11 @@ public class Main {
     // aud feel free to change the size back
     private static int SCREEN_WIDTH = 700;
     private static int SCREEN_HEIGHT = 700;
-    private static double BOID_SIZE = .025;
+    private static double BOID_SIZE = .025 / 2;
 
     /** adds random number of boids with random positions and velocities to flock */
     private static void addInitialBoids(Flock flock) {
-        int numBoids = rand.nextInt(10);
+        int numBoids = rand.nextInt(20);
         double posMin = 0.1;
         double posMax = .9;
         double velMax = 0.01;

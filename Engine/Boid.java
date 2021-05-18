@@ -17,7 +17,7 @@ public class Boid {
 //    private static double ALIGNMENT_RATE = 0;
     private static double TOO_CLOSE_DISTANCE = GRID_LENGTH / 20;
     private static double NEARBY_BOID_RADIUS = GRID_LENGTH / 4;
-    // when its w/in 1/20 of the grid length (4x4) from the wall
+    // when its w/in 1/8 of the grid length (1x1) from the wall
     private static double tooClosetoWall = GRID_LENGTH / 8;
     private static double wallAdjustAmount = GRID_LENGTH;
     private static double AVOID_WALL_RATE = GRID_LENGTH / 70;
@@ -116,6 +116,8 @@ public class Boid {
         return avoidWallVel.multiply(AVOID_WALL_RATE);
     }
 
+    /** takes in a vector and outputs a vector where x and y are at most the absolute values
+     * of the SPEED_Limit*/
     public Vector speedLimit(Vector v) {
         return new Vector(min(max(-SPEED_LIMIT, v.getX()), SPEED_LIMIT), min(max(-SPEED_LIMIT, v.getY()), SPEED_LIMIT));
     }
@@ -148,6 +150,8 @@ public class Boid {
         return nearby;
     }
 
+    /** takes all nearbyBoids and applies each rule to each boid. It then updates the velocity and
+     * position of each boid */
     public void updateBoid() {
         ArrayList<Boid> nearbyBoids = nearbyBoids();
         // apply all rules to boid

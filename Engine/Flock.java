@@ -27,14 +27,11 @@ public class Flock {
 //        }
 //    }
 
-    /** Ok this is probably pretty janky but I haven't thought of a better solution
-     * to update the boids yet. AUD let me know if you think of anything!
-     */
+    /** updates each boid in a flock */
     public void updateBoids() {
         // array of new velocities in order of the boids in the flock
 //        ArrayList<Vector> newVelocities = new ArrayList<>();
-        ArrayList<Boid> boids = getBoids();
-        for (Boid boid: boids) {
+        for (Boid boid: getBoids()) {
 //            ArrayList<Boid> nearbyBoids = boid.nearbyBoids();
             boid.updateBoid();
 //            Vector v1 = boid.cohesionRule(nearbyBoids);

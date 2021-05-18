@@ -6,15 +6,15 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class Main {
-    private static Random rand = new Random(50);
-    // aud feel free to change the size back
+    private static Random rand = new Random(52);
     private static int SCREEN_WIDTH = 700;
     private static int SCREEN_HEIGHT = 700;
     private static double BOID_SIZE = .025 / 2;
 
     /** adds random number of boids with random positions and velocities to flock */
     private static void addInitialBoids(Flock flock) {
-        int numBoids = rand.nextInt(20);
+        // makes sure we get at least a few boids
+        int numBoids = rand.nextInt(15) + 5;
         double posMin = 0.1;
         double posMax = .9;
         double velMax = 0.01;
@@ -63,7 +63,7 @@ public class Main {
             StdDraw.clear();
             drawBoids(flock);
             flock.updateBoids();
-            StdDraw.pause(20);
+            StdDraw.pause(10);
             StdDraw.show();
             StdDraw.pause(20);
         }

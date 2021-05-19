@@ -23,3 +23,11 @@ Test: place to test all our classes and end product
 Precreated psuedocode: http://www.vergenet.net/~conrad/boids/pseudocode.html
 https://cs.stanford.edu/people/eroberts/courses/soco/projects/2008-09/modeling-natural-systems/boids.html
 https://www.red3d.com/cwr/boids/
+
+
+#Next Steps 
+- use non-constant multipliers for rules
+- 3D Boids (use size for z dimension)
+- interactive switches for different rates, ability to do different size screens/landscapes
+- mouse as center of flock or click to add new boids
+- different flocks (distinguised by different colors)

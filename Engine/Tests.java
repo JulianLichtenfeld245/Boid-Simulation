@@ -193,4 +193,10 @@ public class Tests {
         edu.princeton.cs.algs4.StdDraw.pause(100000);
 
     }
+
+    @Test
+    public void string() {
+        Vector v1 = new Vector(1, 2, 5);
+        v1.toString();
+    }
 }

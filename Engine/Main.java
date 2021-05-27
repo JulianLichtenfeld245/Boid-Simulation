@@ -6,7 +6,7 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class Main {
-    private static Random rand = new Random(52);
+    private static Random rand = new Random(50);
     private static int SCREEN_WIDTH = 700;
     private static int SCREEN_HEIGHT = 700;
     private static double BOID_SIZE_MAX = .025 / 2;

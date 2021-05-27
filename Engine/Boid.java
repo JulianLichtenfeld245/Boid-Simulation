@@ -48,10 +48,11 @@ public class Boid {
      * @param nearbyBoids
      */
     public Vector cohesionRule(ArrayList<Boid> nearbyBoids) {
-        Vector massCenter = new Vector();
+        ArrayList<Vector> positions = new ArrayList<>();
         for (Boid boid: nearbyBoids) {
-            massCenter = massCenter.add(boid.getPosition());
+            positions.add(boid.getPosition());
         }
+        Vector massCenter = Vector.add(positions);
         // the max w/ 1 stops bugs if nearbyBoids is empty
         massCenter = massCenter.multiply(1.0 / max(nearbyBoids.size(), 1));
         Vector cohesionAdjument = massCenter.subtract(getPosition());
@@ -65,12 +66,14 @@ public class Boid {
      * @return
      */
     public Vector alignmentRule(ArrayList<Boid> nearbyBoids) {
-        Vector avgVel = new Vector();
+        ArrayList<Vector> vels = new ArrayList<>();
         for (Boid boid: nearbyBoids) {
-            avgVel = avgVel.add(boid.getVelocity());
+            vels.add(boid.getVelocity());
         }
+
+        Vector sumVel = Vector.add(vels);
         // the max w/ 1 stops bugs if nearbyBoids is empty
-        avgVel = avgVel.multiply(1.0 / max(nearbyBoids.size(), 1));
+        Vector avgVel = sumVel.multiply(1.0 / max(nearbyBoids.size(), 1));
         Vector alignmentAdjustment = avgVel.subtract(getVelocity());
         return alignmentAdjustment.multiply(ALIGNMENT_RATE);
     }
@@ -81,7 +84,7 @@ public class Boid {
      * @return
      */
     public Vector separationRule(ArrayList<Boid> nearbyBoids) {
-        Vector separationVel = new Vector();
+        Vector separationVel = Vector.zeroVector(getPosition().getDims().size());
         for (Boid boid: nearbyBoids) {
             double dist = getPosition().distance(boid.getPosition());
             if (dist < TOO_CLOSE_DISTANCE) {
@@ -92,27 +95,40 @@ public class Boid {
         return separationVel;
     }
 
-    /** If boid gets within tooClosetoWall, then add to vel vectors so boid will move away from walls.
-     * Later, make it so they move from walls with increasing intensity as it gets closer to the wall*/
+    /** If boid gets within tooClosetoWall, then add to vel vectors so boid will move away from walls */
     public Vector avoidWalls() {
-        Vector avoidWallVel = new Vector();
-        // how long grid is from center to a side
-        if (position.getX() < tooClosetoWall) {
-            avoidWallVel = new Vector(wallAdjustAmount, 0);
-//            avoidWallVel = avoidWallVel.subtract(new Vector(getPosition().getX() - GRID_LENGTH, 0));
+        // Old code that can be deleted commented in line below
+//        Vector avoidWallVel = new Vector();
+        ArrayList<Double> avoidDims = new ArrayList<>();
+        for (double dim: position.getDims()) {
+            if (dim < tooClosetoWall) {
+                avoidDims.add(wallAdjustAmount);
+            }
+            else if (dim > GRID_LENGTH - tooClosetoWall) {
+                avoidDims.add(-wallAdjustAmount);
+            }
+            else {
+                avoidDims.add(0.0);
+            }
         }
-        else if (position.getX() > GRID_LENGTH - tooClosetoWall) {
-            avoidWallVel = new Vector(-wallAdjustAmount, 0);
-//            avoidWallVel = avoidWallVel.subtract(new Vector(getPosition().getX(), 0));
-        }
-        if (position.getY() < tooClosetoWall) {
-            avoidWallVel = new Vector(0, wallAdjustAmount);
-//            avoidWallVel = avoidWallVel.subtract(new Vector(0, getPosition().getY() - GRID_LENGTH));
-        }
-        else if (position.getY() > GRID_LENGTH - tooClosetoWall) {
-            avoidWallVel = new Vector(0, -wallAdjustAmount);
-//            avoidWallVel = avoidWallVel.subtract(new Vector(0, getPosition().getY()));
-        }
+        // Old code that can be deleted
+//        if (position.getX() < tooClosetoWall) {
+//            avoidWallVel = new Vector(wallAdjustAmount, 0);
+////            avoidWallVel = avoidWallVel.subtract(new Vector(getPosition().getX() - GRID_LENGTH, 0));
+//        }
+//        else if (position.getX() > GRID_LENGTH - tooClosetoWall) {
+//            avoidWallVel = new Vector(-wallAdjustAmount, 0);
+////            avoidWallVel = avoidWallVel.subtract(new Vector(getPosition().getX(), 0));
+//        }
+//        if (position.getY() < tooClosetoWall) {
+//            avoidWallVel = new Vector(0, wallAdjustAmount);
+////            avoidWallVel = avoidWallVel.subtract(new Vector(0, getPosition().getY() - GRID_LENGTH));
+//        }
+//        else if (position.getY() > GRID_LENGTH - tooClosetoWall) {
+//            avoidWallVel = new Vector(0, -wallAdjustAmount);
+////            avoidWallVel = avoidWallVel.subtract(new Vector(0, getPosition().getY()));
+//        }
+        Vector avoidWallVel = new Vector(avoidDims);
         return avoidWallVel.multiply(AVOID_WALL_RATE);
     }
 
@@ -154,12 +170,16 @@ public class Boid {
      * position of each boid */
     public void updateBoid() {
         ArrayList<Boid> nearbyBoids = nearbyBoids();
-        // apply all rules to boid
-        Vector v1 = cohesionRule(nearbyBoids);
-        Vector v2 = alignmentRule(nearbyBoids);
-        Vector v3 = separationRule(nearbyBoids);
+        Vector vel = getVelocity();
+        // apply all rules to boid, first 3 rules only apply if there are nearby boids
+        if (!nearbyBoids.isEmpty()) {
+            Vector v1 = cohesionRule(nearbyBoids);
+            Vector v2 = alignmentRule(nearbyBoids);
+            Vector v3 = separationRule(nearbyBoids);
+            vel = vel.add(v1).add(v2).add(v3);
+        }
         Vector v4 = avoidWalls();
-        velocity = speedLimit(getVelocity().add(v1).add(v2).add(v3).add(v4));
+        velocity = speedLimit(vel.add(v4));
         position = getPosition().add(getVelocity());
     }
 

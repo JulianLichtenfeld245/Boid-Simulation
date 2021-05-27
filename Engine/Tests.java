@@ -199,4 +199,16 @@ public class Tests {
         Vector v1 = new Vector(1, 2, 5);
         v1.toString();
     }
+
+    @Test
+    public void adding() {
+        Vector v1 = new Vector(1, 2, 4);
+        Vector v2 = new Vector(2, 8, 9);
+        Vector v3 = new Vector(1, 1, 1);
+        ArrayList<Vector> vs = new ArrayList<>();
+        vs.add(v1);
+        vs.add(v2);
+        vs.add(v3);
+        Vector added = Vector.add(vs);
+    }
 }

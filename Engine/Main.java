@@ -9,7 +9,9 @@ public class Main {
     private static Random rand = new Random(52);
     private static int SCREEN_WIDTH = 700;
     private static int SCREEN_HEIGHT = 700;
-    private static double BOID_SIZE = .025 / 2;
+    private static double BOID_SIZE_MAX = .025 / 2;
+    // smallest fraction of BOID_SIZE_MAX that Boid can be (when Z=0)
+    private static double BOID_SIZE_MIN_FRACTION = 1.0 / 4;
 
     /** adds random number of boids with random positions and velocities to flock */
     private static void addInitialBoids(Flock flock) {
@@ -36,18 +38,26 @@ public class Main {
         double yPos;
         double xVel;
         double yVel;
-        for(int i = 0; i < thisFlock.getBoids().size(); i++){
-            xPos = thisFlock.getBoids().get(i).position.getX();
-            yPos = thisFlock.getBoids().get(i).position.getY();
+        double boidSizeMin = BOID_SIZE_MAX * BOID_SIZE_MIN_FRACTION;
+        for(int i = 0; i < thisFlock.getBoids().size(); i++) {
+            Boid thisBoid = thisFlock.getBoids().get(i);
+            Vector pos = thisBoid.getPosition();
+            xPos = pos.getX();
+            yPos = pos.getY();
             // to have boid in right direction
-            xVel = thisFlock.getBoids().get(i).getVelocity().getX();
-            yVel = thisFlock.getBoids().get(i).getVelocity().getY();
+            Vector vel = thisBoid.getVelocity();
+            xVel = vel.getX();
+            yVel = vel.getY();
             double radians = Math.atan(yVel / xVel);
             double degrees = radians * 180 / Math.PI + 90;
             if (xVel > 0) {
                 degrees += 180;
             }
-            StdDraw.picture(xPos,yPos,"Engine/boid.png", BOID_SIZE, BOID_SIZE * 2, degrees);
+            double boidSize = BOID_SIZE_MAX;
+            if (pos.getDims().size() == 3) {
+                boidSize = (boidSize - boidSizeMin) * pos.getZ() + boidSizeMin;
+            }
+            StdDraw.picture(xPos,yPos,"Engine/boid.png", boidSize, boidSize * 2, degrees);
         }
     }
 

@@ -38,6 +38,14 @@ public class Vector {
         this(new ArrayList<Double>(Arrays.asList(0.0, 0.0)));
     }
 
+    public static Vector zeroVector(int numDims) {
+        ArrayList<Double> dims = new ArrayList<>();
+        for (int i=0; i < numDims; i++) {
+            dims.add(0.0);
+        }
+        return new Vector(dims);
+    }
+
     public double getX() {
         return dims.get(0);
     }
@@ -73,12 +81,19 @@ public class Vector {
 //        return new  Vector(xSum, ySum, zSum);
     }
 
-    public Vector add(ArrayList<Vector> vectors) {
-        Vector sum_vec = new Vector();
-        for (Vector vector: vectors) {
-            sum_vec = sum_vec.add(vector);
+    /** sums multiple vectors together with same technique as adding two vectors (see above)
+     * is static so that an initial vector is not necessary. i.e. Vector.add(vectors) can be called */
+    public static Vector add(ArrayList<Vector> vectors) {
+        ArrayList<Double> newDims = new ArrayList();
+        for (int i=0; i < vectors.get(0).getDims().size(); i++) {
+            newDims.add(0.0);
         }
-        return sum_vec;
+        for (Vector vector: vectors) {
+            for (int i=0; i < vector.getDims().size(); i++) {
+                newDims.set(i, vector.getDims().get(i) + newDims.get(i));
+            }
+        }
+        return new Vector(newDims);
     }
 
     /** returns a new vector with x and y values equal to the value of self values minus otherVector values

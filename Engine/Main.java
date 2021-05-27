@@ -26,9 +26,13 @@ public class Main {
             // this is a weird way to get random number between -posMax and posMax
             double xPos = min(max(rand.nextDouble(), posMin), posMax);
             double yPos = min(max(rand.nextDouble(), posMin), posMax);
+            double zPos = min(max(rand.nextDouble(), posMin), posMax);
+            Vector pos = new Vector(xPos, yPos, zPos);
             double xVel = rand.nextDouble() * velMax - velMax;
             double yVel = rand.nextDouble() * velMax - velMax;
-            new Boid(xPos, yPos, xVel, yVel, flock);
+            double zVel = rand.nextDouble() * velMax - velMax;
+            Vector vel = new Vector(xVel, yVel, zVel);
+            new Boid(pos, vel, flock);
         }
     }
 

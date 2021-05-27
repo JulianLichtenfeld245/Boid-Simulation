@@ -135,7 +135,10 @@ public class Boid {
     /** takes in a vector and outputs a vector where x and y are at most the absolute values
      * of the SPEED_Limit*/
     public Vector speedLimit(Vector v) {
-        return new Vector(min(max(-SPEED_LIMIT, v.getX()), SPEED_LIMIT), min(max(-SPEED_LIMIT, v.getY()), SPEED_LIMIT));
+        ArrayList<Double> newVel= new ArrayList<>();
+        for (int i=0; i < v.getDims().size(); i++)
+            newVel.add(min(max(-SPEED_LIMIT, v.getDims().get(i)), SPEED_LIMIT));
+        return new Vector(newVel);
     }
 
     public Flock getMyFlock() {

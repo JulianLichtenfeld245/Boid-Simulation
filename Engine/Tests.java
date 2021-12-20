@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+import static Engine.Main.drawBoids;
 import static org.junit.Assert.*;
 
 public class Tests {
@@ -211,4 +212,40 @@ public class Tests {
         vs.add(v3);
         Vector added = Vector.add(vs);
     }
+
+    @Test
+    public void exponentials() {
+        Vector v1 = new Vector(1, 2, 4);
+        Vector v2 = new Vector(-2, 8, 9);
+        Vector v3 = new Vector(1, -1, 1);
+        Vector v4 = v1.expon(2);
+        Vector v5 = v2.expon(3);
+        Vector v6 = v3.expon(7);
+    }
+
+    @Test
+    public void angles() {
+//        Rn it seems like a distance vector and a boid have different angles for different dirctions
+//        need to make them the same so we can make nearby boids not include boids that are behind
+//        one another
+        Vector v1 = new Vector(0, 1, 0);
+        Flock testFlock = new Flock();
+        Vector pos = new Vector(0.5,0.5,1);
+        Vector pos2 = new Vector(0.4,0.5,1);
+        Boid testBoid = new Boid(pos, v1, testFlock);
+        Boid testBoid2 = new Boid(pos2, v1, testFlock);
+        Vector dist = testBoid.getPosition().subtract(testBoid2.getPosition());
+        System.out.println(dist.angle());
+        System.out.println(testBoid.getVelocity().angle());
+        System.out.println(testBoid.getVelocity().angle().get(0) - dist.angle().get(0));
+        edu.princeton.cs.algs4.StdDraw.setCanvasSize(700, 700);
+        edu.princeton.cs.algs4.StdDraw.setScale(0, 1);
+        drawBoids(testFlock);
+        edu.princeton.cs.algs4.StdDraw.show();
+        edu.princeton.cs.algs4.StdDraw.pause(100000);
+    }
+
+//    for boid: Down is 180 deg, right is 270 deg(x=1), 90 is left, up is 0 degrees (y=-1,x=0)
+
 }
+//    for dist vector: right (from v1 to v2 in v1-v2) is 90, up is 0, left is 270

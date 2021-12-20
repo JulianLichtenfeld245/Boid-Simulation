@@ -12,11 +12,14 @@ public class Main {
     private static double BOID_SIZE_MAX = .025 / 2;
     // smallest fraction of BOID_SIZE_MAX that Boid can be (when Z=0)
     private static double BOID_SIZE_MIN_FRACTION = 1.0 / 4;
+    // max and min number of boids to be created
+    private static int MIN_NUM_BOIDS = 250;
+    private static int MAX_NUM_BOIDS = 350;
 
     /** adds random number of boids with random positions and velocities to flock */
     private static void addInitialBoids(Flock flock) {
         // makes sure we get at least a few boids
-        int numBoids = rand.nextInt(15) + 5;
+        int numBoids = rand.nextInt(MAX_NUM_BOIDS - MIN_NUM_BOIDS) + MIN_NUM_BOIDS;
         double posMin = 0.1;
         double posMax = .9;
         double velMax = 0.01;

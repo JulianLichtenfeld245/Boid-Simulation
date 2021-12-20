@@ -61,7 +61,6 @@ public class Vector {
 
     public ArrayList<Double> getDims() { return dims; }
 
-
     /** returns a new vector with x and y values equal to the sum of otherVector and self values
      * without modifying either input vectors*/
     public Vector add(Vector otherVector) {
@@ -96,8 +95,7 @@ public class Vector {
         return new Vector(newDims);
     }
 
-    /** returns a new vector with x and y values equal to the value of self values minus otherVector values
-     * without modifying either input vectors*/
+    /** x.subtract(y) returns a new vector x - y (matrix subtraction) */
     public Vector subtract(Vector otherVector) {
         ArrayList<Double> newDims = new ArrayList();
         for (int i=0; i < dims.size(); i++) {
@@ -131,6 +129,20 @@ public class Vector {
 //        return new Vector(xProduct, yProduct, zProduct);
     }
 
+    /** exponentiates each dimension by factor
+     *
+     * @param factor
+     * @return
+     */
+    public Vector expon(double factor) {
+        ArrayList<Double> newDims = new ArrayList();
+        for (int i=0; i < dims.size(); i++) {
+            Double v1Dim = getDims().get(i);
+            newDims.add(Math.pow(v1Dim, factor));
+        }
+        return new Vector(newDims);
+    }
+
     /** returns the euclidian distance between two vectors */
     public double distance(Vector otherVector) {
         // vector describing the distance between the self vector and otherVector
@@ -142,6 +154,43 @@ public class Vector {
         return Math.sqrt(sum);
     }
 
+    public ArrayList<Double> angle() {
+        ArrayList<Double> angle = new ArrayList();
+        double xVel = getX();
+        double yVel = getY();
+        double thetaRadians = Math.atan(yVel / xVel);
+        double thetaDegrees = thetaRadians * 180 / Math.PI + 90;
+        if (xVel > 0) {
+            thetaDegrees += 180;
+        }
+        angle.add(thetaDegrees);
+        if (getDims().size() == 3) {
+            double zVel = getZ();
+            if (zVel == 0 || xVel == 0) {
+                angle.add(0.0);
+                return angle;
+            }
+            double phiRadians = Math.atan(Math.sqrt(Math.pow(yVel, 2) / Math.pow(xVel, 2)) / zVel);
+            double phiDegrees = phiRadians * 180 / Math.PI + 90;
+            angle.add(phiDegrees);
+        }
+        return angle;
+    }
+
+    /** returns the angle between the boid (based on its velocity vector) and a position
+     * vector in terms of degrees
+     * NOTE: This function does not generalize to higher dimensions than 3
+     * @param posVector
+     * @return
+     */
+    public double angle(Vector posVector) {
+        return 0.0;
+    }
+    /** */
+    public boolean nearby(Vector otherVector, double angle) {
+        return false;
+        }
+
     public boolean equals(Object o) {
         Vector other = (Vector) o;
         boolean equal = true;
@@ -152,11 +201,14 @@ public class Vector {
     }
 
     public String toString() {
-        String string = "(" + Double.toString(getX()) + ", " + Double.toString(getY());
-        if (getDims().size() == 3) {
-            string += ", " + Double.toString((getZ()));
+        String str = "(";
+        int i = 0;
+        while(i + 1 < getDims().size()) {
+            str += Double.toString(getDims().get(i)) + ", ";
+            i += 1;
         }
-        string += ")";
-        return string;
+        str += Double.toString(getDims().get(i));
+        str += ")";
+        return str;
     }
 }

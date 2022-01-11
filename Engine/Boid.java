@@ -10,28 +10,39 @@ public class Boid {
     private Flock myFlock;
 //    Grid is a 1 x 1
     private static double GRID_LENGTH = 1.0;
+
+//    Alter below private static variables to change boid characteristics
     private static double COHESION_RATE = 1.0 / 100;
     private static double ALIGNMENT_RATE = 1.0 / 10;
     private static double TOO_CLOSE_RATE = 1.0 / 10;
-
-    //    private static double COHESION_RATE = 0;
-//    private static double ALIGNMENT_RATE = 0;
     private static double TOO_CLOSE_DISTANCE = GRID_LENGTH / 10;
     private static double NEARBY_BOID_RADIUS = GRID_LENGTH / 4;
     private static double NEARBY_BOID_NUMBER = 12;
-    // when its w/in 1/8 of the grid length (1x1) from the wall
+    // incentivize moving away from wall when boid w/in 1/x of the grid length (1x1) from the wall
     private static double tooClosetoWall = GRID_LENGTH / 8;
     private static double tooClosetoCenter = GRID_LENGTH / 15;
     private static double wallAdjustAmount = GRID_LENGTH;
     private static double AVOID_WALL_RATE = GRID_LENGTH / 70;
     private static double SPEED_LIMIT = GRID_LENGTH / 50;
 
+
 //    Fun shapes
-//    If set to 0, the shape incentive function will not be run
-//    To use a shape, set rate to a fraction of 1.0
+//    If any shape_rate is set to 0, the shape incentive function will not be run
+//    To use a shape, a rate above 50 is recommended
+//    CENTER is not recommended, mostly used for testing, rate should be a fraction of 1
     private static double CENTER_RATE = 0;
+
+//    SPHERE
+//    recommend rate of 100
     private static double SPHERE_RATE = 100;
     private static double SPHERE_RADIUS = 1.0 / 3;
+//    exponential seems to smooth movement (prevent jerking) but non-expon also has
+//    cool movement
+    private static boolean USE_EXPONENTIAL = true;
+//    DISK
+    private static double DISK_RATE =0;
+    private static double DISK_RADIUS = 1.0 / 3;
+    private static double DISK_Y_ADJ = 1;
 
 
     public Boid(Vector pos, Vector vel, Flock flock) {
@@ -108,8 +119,6 @@ public class Boid {
 
     /** If boid gets within tooClosetoWall, then add to vel vectors so boid will move away from walls */
     public Vector avoidWalls() {
-        // Old code that can be deleted commented in line below
-//        Vector avoidWallVel = new Vector();
         ArrayList<Double> avoidDims = new ArrayList<>();
         for (double dim: position.getDims()) {
             if (dim < tooClosetoWall) {
@@ -122,23 +131,7 @@ public class Boid {
                 avoidDims.add(0.0);
             }
         }
-        // Old code that can be deleted
-//        if (position.getX() < tooClosetoWall) {
-//            avoidWallVel = new Vector(wallAdjustAmount, 0);
-////            avoidWallVel = avoidWallVel.subtract(new Vector(getPosition().getX() - GRID_LENGTH, 0));
-//        }
-//        else if (position.getX() > GRID_LENGTH - tooClosetoWall) {
-//            avoidWallVel = new Vector(-wallAdjustAmount, 0);
-////            avoidWallVel = avoidWallVel.subtract(new Vector(getPosition().getX(), 0));
-//        }
-//        if (position.getY() < tooClosetoWall) {
-//            avoidWallVel = new Vector(0, wallAdjustAmount);
-////            avoidWallVel = avoidWallVel.subtract(new Vector(0, getPosition().getY() - GRID_LENGTH));
-//        }
-//        else if (position.getY() > GRID_LENGTH - tooClosetoWall) {
-//            avoidWallVel = new Vector(0, -wallAdjustAmount);
-////            avoidWallVel = avoidWallVel.subtract(new Vector(0, getPosition().getY()));
-//        }
+
         Vector avoidWallVel = new Vector(avoidDims);
         return avoidWallVel.multiply(AVOID_WALL_RATE);
     }
@@ -152,33 +145,73 @@ public class Boid {
         Vector center = new Vector(centerDims);
         double dist = center.distance(getPosition());
         Vector circCenter = center.subtract(getPosition());
-//        if (dist < tooClosetoCenter) {
-//            circCenter = getPosition().subtract(center);
-//        }
         return circCenter.multiply(CENTER_RATE);
     }
 
-    /** returns a vector that incentivizes boids to maintain SPHERE_RADIUS distance from the grid center
+    /** returns a vector that incentivizes boids to maintain SPHERE_RADIUS distance (in 3D)
+     * from the grid center
      *
      * @return
      */
     public Vector sphereCenter() {
         double halfGrid = GRID_LENGTH / 2;
         ArrayList<Double> centerDims = new ArrayList<>();
-        for (double dim: position.getDims()) {
+        for (double dim : position.getDims()) {
             centerDims.add(halfGrid);
         }
         Vector center = new Vector(centerDims);
         double distToCenter = center.distance(getPosition());
         Vector toCenter = center.subtract(getPosition());
-        double total_sphere_rate = Math.pow(distToCenter - SPHERE_RADIUS, 3) * SPHERE_RATE;
-//        Vector towardsSphere = min(dist((myPos + vector), distToCenter) = radius)
+//        exponential smooths distance to radius vector so locations close to sphere edge (radius
+//         dist from center) don't receive large incentive to move closer to sphere edge
+        double total_sphere_rate;
+        if (USE_EXPONENTIAL) {
+            total_sphere_rate = Math.pow(distToCenter - SPHERE_RADIUS, 3) * SPHERE_RATE;
+        } else {
+            total_sphere_rate = (distToCenter - SPHERE_RADIUS) / 200 * SPHERE_RATE;
+        }
         return toCenter.multiply(total_sphere_rate);
     }
-//    have boid head straight for center, use exponential (like cubed with small factor to make far away
-//    from radius much more impactful
 
-    /** takes in a vector and outputs a vector where x and y are at most the absolute values
+    /** returns a vector that incentivizes boids to maintain SPHERE_RADIUS distance (in 2D,
+     * X and Z, NOT Y) from the grid center, adds vector encouraging towards center y value
+     * @return
+     */
+    public Vector DiskCenter() {
+        double halfGrid = GRID_LENGTH / 2;
+        ArrayList<Double> centerDims = new ArrayList<>();
+        for (double dim : position.getDims()) {
+            centerDims.add(halfGrid);
+        }
+        Vector center = new Vector(centerDims);
+//        set center Y to position Y so they cancel in distance calculations
+        Vector cancelY = new Vector(0, getPosition().getY() - center.getY(), 0);
+//        center in X and Z but not Y
+        Vector pseudoCenter = center.add(cancelY);
+        Vector toCenter = pseudoCenter.subtract(getPosition());
+//        Double sum = 0.0;
+////        X Dimension
+//        sum += Math.pow(toCenter.getDims().get(0), 2);
+////        Z Dimension
+//        sum += Math.pow(toCenter.getDims().get(2), 2);
+//        double distToCenter = Math.sqrt(sum);
+
+        double distToCenter = pseudoCenter.distance(getPosition());
+        double total_disk_rate;
+        if (USE_EXPONENTIAL) {
+            total_disk_rate = Math.pow(distToCenter - DISK_RADIUS, 3) * DISK_RATE;
+        } else {
+            total_disk_rate = (distToCenter - DISK_RADIUS) / 200 * DISK_RATE;
+        }
+//        add to vector to incentivize being close to Y center plane
+        double yMag = (center.getY() - getPosition().getY()) * DISK_Y_ADJ;
+        Vector yAdjustment = new Vector(0, yMag, 0);
+        toCenter = toCenter.add(yAdjustment);
+
+        return toCenter.multiply(total_disk_rate);
+    }
+
+    /** takes in a vector and outputs a vector where each dimension is at most the absolute values
      * of the SPEED_Limit*/
     public Vector speedLimit(Vector v) {
         ArrayList<Double> newVel= new ArrayList<>();
@@ -203,13 +236,9 @@ public class Boid {
      * @return
      */
     public ArrayList<Boid> nearbyBoids() {
-//        need a good algorithm for range search and can then specify a circle around the boid to include
-//        in nearbyBoids
-//        ex:
-//        circle = circleAroundBoid()
-//        return rangeSearch(BOIDS, circle)
-        // naiveNearbyBoids below needs to be replaced with more efficient version, KD Tree maybe with range
-        // searching, but we want it to be able to handle 3 dimensions as well?
+//        Future capabilities:
+//        - more efficient search
+//        - only find boids next to or in front of boid, not behind (see Craig Reynold's boid neighborhood)
         ArrayList<Boid> nearby = new ArrayList<>();
         for (Boid boid: getBoids()) {
             if (nearby.size() >= NEARBY_BOID_NUMBER) {
@@ -233,6 +262,7 @@ public class Boid {
             Vector v2 = alignmentRule(nearbyBoids);
             Vector v3 = separationRule(nearbyBoids);
             vel = vel.add(v1).add(v2).add(v3);
+        }
             if (CENTER_RATE > 0) {
                 Vector v5 = circleCenter();
                 vel = vel.add(v5);
@@ -241,8 +271,12 @@ public class Boid {
                 Vector v6 = sphereCenter();
                 vel = vel.add(v6);
             }
-        }
+            if (DISK_RATE > 0) {
+                Vector v7 = DiskCenter();
+                vel = vel.add(v7);
+            }
         Vector v4 = avoidWalls();
+        System.out.println(vel);
         velocity = speedLimit(vel.add(v4));
         position = getPosition().add(getVelocity());
     }

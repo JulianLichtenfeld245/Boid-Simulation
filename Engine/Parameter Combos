@@ -1,0 +1,53 @@
+Cool paramater combos
+
+tight group swarms around center
+        private static double TOO_CLOSE_DISTANCE = GRID_LENGTH / 10;
+            private static double NEARBY_BOID_RADIUS = GRID_LENGTH / 4;
+            private static double NEARBY_BOID_NUMBER = 12;
+            // when its w/in 1/8 of the grid length (1x1) from the wall
+            private static double tooClosetoWall = GRID_LENGTH / 8;
+            private static double tooClosetoCenter = GRID_LENGTH / 15;
+            private static double wallAdjustAmount = GRID_LENGTH;
+            private static double AVOID_WALL_RATE = GRID_LENGTH / 70;
+            private static double SPEED_LIMIT = GRID_LENGTH / 50;
+
+        //    Fun shapes
+        //    If set to 0, the shape incentive function will not be run
+        //    To use a shape, rate above 50 recommended
+        //    CENTER does not work well, rate should be a fraction of 1
+            private static double CENTER_RATE = 0;
+
+        //    SPHERE
+        //    recommend rate of 100
+            private static double SPHERE_RATE = 100;
+            private static double SPHERE_RADIUS = 1.0 / 3;
+
+
+Creates a sphere
+        private static double GRID_LENGTH = 1.0;
+            private static double COHESION_RATE = 1.0 / 100;
+            private static double ALIGNMENT_RATE = 1.0 / 10;
+            private static double TOO_CLOSE_RATE = 1.0 / 10;
+
+            //    private static double COHESION_RATE = 0;
+        //    private static double ALIGNMENT_RATE = 0;
+            private static double TOO_CLOSE_DISTANCE = GRID_LENGTH / 10;
+            private static double NEARBY_BOID_RADIUS = GRID_LENGTH / 4;
+            private static double NEARBY_BOID_NUMBER = 12;
+            // when its w/in 1/8 of the grid length (1x1) from the wall
+            private static double tooClosetoWall = GRID_LENGTH / 8;
+            private static double tooClosetoCenter = GRID_LENGTH / 15;
+            private static double wallAdjustAmount = GRID_LENGTH;
+            private static double AVOID_WALL_RATE = GRID_LENGTH / 70;
+            private static double SPEED_LIMIT = GRID_LENGTH / 50;
+
+        //    Fun shapes
+        //    If set to 0, the shape incentive function will not be run
+        //    To use a shape, rate above 50 recommended
+        //    CENTER does not work well, rate should be a fraction of 1
+            private static double CENTER_RATE = 0;
+
+        //    SPHERE
+        //    recommend rate of 100
+            private static double SPHERE_RATE = 100;
+            private static double SPHERE_RADIUS = 1.0 / 3;

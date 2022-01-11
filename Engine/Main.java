@@ -12,13 +12,12 @@ public class Main {
     private static double BOID_SIZE_MAX = .025 / 2;
     // smallest fraction of BOID_SIZE_MAX that Boid can be (when Z=0)
     private static double BOID_SIZE_MIN_FRACTION = 1.0 / 4;
-    // max and min number of boids to be created
+    // max and min number of boids to be created, chooses a random number between min and max
     private static int MIN_NUM_BOIDS = 250;
     private static int MAX_NUM_BOIDS = 350;
 
     /** adds random number of boids with random positions and velocities to flock */
     private static void addInitialBoids(Flock flock) {
-        // makes sure we get at least a few boids
         int numBoids = rand.nextInt(MAX_NUM_BOIDS - MIN_NUM_BOIDS) + MIN_NUM_BOIDS;
         double posMin = 0.1;
         double posMax = .9;
@@ -26,7 +25,6 @@ public class Main {
         for (int i = 0; i < numBoids; i ++) {
             // get random values for pos and vel between posMin and posMax or -velMax and velMax
             // since grid space is between -2 and 2
-            // this is a weird way to get random number between -posMax and posMax
             double xPos = min(max(rand.nextDouble(), posMin), posMax);
             double yPos = min(max(rand.nextDouble(), posMin), posMax);
             double zPos = min(max(rand.nextDouble(), posMin), posMax);
@@ -39,7 +37,7 @@ public class Main {
         }
     }
 
-    // StdDraw works so that grid is from (-2,-2) to (2,2) for positions no matter the screen width and height
+    // StdDraw works so that grid is cube from (0,0,0) to (1,1,1) for positions no matter the screen width and height
     public static void drawBoids(Flock thisFlock) {
         double xPos;
         double yPos;

@@ -21,29 +21,10 @@ public class Flock {
         return boids;
     }
 
-//    public void updateBoidsAlt() {
-//        for (Boid boid: getBoids()) {
-//            boid.updateBoid();
-//        }
-//    }
-
     /** updates each boid in a flock */
     public void updateBoids() {
-        // array of new velocities in order of the boids in the flock
-//        ArrayList<Vector> newVelocities = new ArrayList<>();
         for (Boid boid: getBoids()) {
-//            ArrayList<Boid> nearbyBoids = boid.nearbyBoids();
             boid.updateBoid();
-//            Vector v1 = boid.cohesionRule(nearbyBoids);
-//            Vector v2 = boid.alignmentRule(nearbyBoids);
-//            Vector v3 = boid.separationRule(nearbyBoids);
-//            newVelocities.add(boid.getVelocity().add(v1).add(v2).add(v3));
-//        }
-//        for (int i = 0; i < newVelocities.size(); i ++) {
-//            Boid boid = boids.get(i);
-//            Vector newVelocity = newVelocities.get(i);
-//            boid.position = boid.getPosition().add(boid.getVelocity());
-//            boid.velocity = newVelocity;
         }
     }
 }

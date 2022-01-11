@@ -61,6 +61,14 @@ public class Vector {
 
     public ArrayList<Double> getDims() { return dims; }
 
+    public double getMagnitude() {
+        Double sum = 0.0;
+        for (int i=0; i < dims.size(); i++) {
+            sum += Math.pow(getDims().get(i), 2);
+        }
+        return Math.sqrt(sum);
+    }
+
     /** returns a new vector with x and y values equal to the sum of otherVector and self values
      * without modifying either input vectors*/
     public Vector add(Vector otherVector) {
